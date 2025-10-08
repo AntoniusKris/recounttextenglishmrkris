@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Basketball Final — Comprehension Quiz</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 850px; margin: 24px auto; padding: 0 16px; line-height:1.6; }
+    h1 { text-align:center; }
+    .story { background:#f8f8f8; padding:12px; border-radius:6px; margin-bottom:18px; }
+    label { font-weight:600; display:block; margin-top:12px; }
+    textarea { width:100%; min-height:70px; padding:8px; font-size:14px; }
+    input[type="text"] { width:100%; padding:8px; font-size:14px; }
+    button { background:#2b7cff; color:#fff; padding:10px 16px; border:0; border-radius:6px; font-size:16px; cursor:pointer; margin-top:12px; }
+    .note { font-size:13px; color:#555; margin-top:8px; }
+    .success { color:green; font-weight:600; margin-top:12px; }
+    .error { color:red; font-weight:600; margin-top:12px; }
+  </style>
+</head>
+<body>
+  <h1>Comprehension Quiz — "An Unforgettable Basketball Final"</h1>
+
+  <div class="story">
+    <strong>Story (read before answering):</strong>
+    <p>Last Sunday was one of the best days of my life. My friends and I planned to watch the basketball final between <strong>Pelita Jaya Jakarta</strong> and <strong>Satria Muda Pertamina</strong> at the stadium. We were very excited because both teams are the best in Indonesia.</p>
+    <p>However, the day didn’t start well for me. I woke up late! We were supposed to meet at a café near the bus station at 1 p.m., but I opened my eyes at 12:45. I got ready in a hurry, grabbed my jacket, and ran to the café. Luckily, my friends were still waiting for me.</p>
+    <p>We took a bus to the stadium, but the traffic was terrible. It was afternoon, and many cars were stuck on the road. We started to worry that we would be late for the game.</p>
+    <p>When we finally arrived, another problem happened — one of my friends lost his ticket! We searched everywhere, but then one of the committee members came to us holding the ticket. It was his. We were so relieved.</p>
+    <p>We entered the stadium just as the referee blew the whistle to start the game. Pelita Jaya played well in the first half and led by many points. In the second half, Satria Muda caught up and even took the lead. Some players were sprained but they kept fighting.</p>
+    <p>In the last few seconds, Pelita Jaya made a three-point buzzer beater and won the final. The crowd went wild. We screamed, jumped, and cried because it was such an emotional moment. That day taught me that sometimes, great experiences come after facing many troubles.</p>
+  </div>
+
+  <form id="quizForm">
+    <label for="name">Name (student):</label>
+    <input id="name" name="name" type="text" required />
+
+    <label for="q1">1. What is the main idea of the story?</label>
+    <textarea id="q1" name="q1" required></textarea>
+
+    <label for="q2">2. Why did the writer almost miss meeting his friends?</label>
+    <textarea id="q2" name="q2" required></textarea>
+
+    <label for="q3">3. How did the traffic affect their trip?</label>
+    <textarea id="q3" name="q3" required></textarea>
+
+    <label for="q4">4. What happened when one of the friends lost his ticket?</label>
+    <textarea id="q4" name="q4" required></textarea>
+
+    <label for="q5">5. Who found the lost ticket?</label>
+    <textarea id="q5" name="q5" required></textarea>
+
+    <label for="q6">6. Describe how the basketball game changed from the first half to the last.</label>
+    <textarea id="q6" name="q6" required></textarea>
+
+    <label for="q7">7. What made the ending so emotional?</label>
+    <textarea id="q7" name="q7" required></textarea>
+
+    <label for="q8">8. What lesson did the writer learn?</label>
+    <textarea id="q8" name="q8" required></textarea>
+
+    <label for="q9">9. How did the writer feel while facing the problems before the game?</label>
+    <textarea id="q9" name="q9" required></textarea>
+
+    <label for="q10">10. If you were in the writer’s position, what would you do differently? Why?</label>
+    <textarea id="q10" name="q10" required></textarea>
+
+    <div class="note">After you press Submit, wait for the success message. Do not press Submit multiple times.</div>
+    <button type="submit">Submit Answers</button>
+
+    <div id="msg" role="status"></div>
+  </form>
+
+  <script>
+    // Replace this with your deployed Apps Script Web App URL
+    const WEB_APP_URL = "WEB_APP_URL";
+
+    document.getElementById("quizForm").addEventListener("submit", function (evt) {
+      evt.preventDefault();
+      const msg = document.getElementById("msg");
+      msg.textContent = "Submitting...";
+      msg.className = "";
+
+      const payload = {
+        name: document.getElementById("name").value.trim(),
+      };
+
+      for (let i = 1; i <= 10; i++) {
+        payload["q" + i] = document.getElementById("q" + i).value.trim();
+      }
+
+      fetch(WEB_APP_URL, {
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.status === "success") {
+          msg.textContent = "Submitted successfully — thank you!";
+          msg.className = "success";
+          document.getElementById("quizForm").reset();
+        } else {
+          msg.textContent = "Error: " + (res && res.message ? res.message : "unknown response");
+          msg.className = "error";
+        }
+      })
+      .catch(err => {
+        msg.textContent = "Submission failed: " + err.message;
+        msg.className = "error";
+      });
+    });
+  </script>
+</body>
+</html>
